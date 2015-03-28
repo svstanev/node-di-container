@@ -6,22 +6,18 @@ Simple AngularJS inspired DI container for node.js
 ### Creating a DI container
 
 To create a DI container:
-
 ```
 var di = require('node-di');
 
 var container = di.container();
-
 ```
 
 To create a DI container that caches resolved dependencies:
 ```
 var container = di.cacheableContainer();
-
 ```
 
 Containers can be chained, creating scopes that help better organize dependencies:
-
 ```
 var global = di.cacheableContainer();
 var scoped = di.cacheableContainer(global);
@@ -46,7 +42,6 @@ container.service('myService', MyService);
 ```
 
 Dependencies of the constructor function may be resolved by the constructor function's argument names, through the $inject annotation or when registering the service:
-
 ```
 function MyService(a, b, c) { ... }
 MyService.$inject = ['dep1', 'dep2', 'dep3'];
@@ -63,8 +58,8 @@ container.factory(function(dep1, dep2){
     return dep1 + dep2;
 });
 ```
-Dependencies of the factory function may be resolved by the factory function's argument names, through the $inject annotation or when registering the factory:
 
+Dependencies of the factory function may be resolved by the factory function's argument names, through the $inject annotation or when registering the factory:
 ```
 function fn(a, b, c) { ... }
 fn.$inject = ['dep1', 'dep2', 'dep3'];
