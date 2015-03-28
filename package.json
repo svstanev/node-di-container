@@ -1,6 +1,6 @@
 {
   "name": "node-di",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Simple AngularJS inspired DI container",
   "main": "index.js",
   "directories": {
