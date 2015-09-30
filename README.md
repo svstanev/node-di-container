@@ -1,4 +1,4 @@
-# node-di
+# node-di [![Build Status](https://travis-ci.org/svstanev/node-di.svg?branch=master)](https://travis-ci.org/svstanev/node-di)
 Simple AngularJS inspired DI container for node.js
 
 ## Usage
