@@ -74,12 +74,17 @@ container.factory(['dep1', 'dep2', 'dep3', fn]);
 #### Invoking a function with dependencies
 Dependencies of the function may be resolved by the function's argument names, through the $inject annotation or when invoking the function:
 ```
-di.container()
+var result = di.container()
     .value('x', 1)
     .value('y', 2)
     .invoke(function add(x, y) {
         return x + y;
     })
+    ;
+        
+var result = di.container()
+    .value('x', 1)
+    .value('y', 2)
     .invoke(['x', 'y', function(a, b) {
         return a + b;
     }])
@@ -88,7 +93,7 @@ di.container()
 
 #### Invoking a constructor function with dependencies
 ```
-di.container()
+var myObject = di.container()
     .value('x', 1)
     .value('y', 2)
     .createInstance(MyObject);
