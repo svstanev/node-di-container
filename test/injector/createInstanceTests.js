@@ -1,20 +1,23 @@
 var assert = require('chai').assert;
-var Container = require('../src/container').Container;
+var di = require('../../src');
 
-suite('create instance tests', function () {
+suite('injector.createInstance', function () {
     var container;
+    var injector;
 
     function Service() {
     }
 
     setup(function () {
-        container = new Container()
+        container = di.container()
             .value('myValue', 123)
             .factory('myValue2', function () {
                 return 'abc';
             })
             .service('myService', Service)
         ;
+
+        injector = di.injector(container);
     });
 
     test('createInstance should instantiate object and inject dependencies', function () {
@@ -27,7 +30,7 @@ suite('create instance tests', function () {
 
         Foo.$inject = ['myValue', 'myValue2', 'myService'];
 
-        var foo = container.createInstance(Foo);
+        var foo = injector.createInstance(Foo);
 
         assert.instanceOf(foo, Foo);
         assert.strictEqual(123, foo.value);
@@ -36,7 +39,7 @@ suite('create instance tests', function () {
 
     });
 
-    test('create instance with array', function () {
+    test('createInstance with array', function () {
         function Foo(x, y) {
             this.value = [x, y];
         }
@@ -46,7 +49,7 @@ suite('create instance tests', function () {
             .value('baz', 'abc');
 
         assert.deepEqual(
-            container.createInstance(['bar', 'baz', Foo]),
+            injector.createInstance(['bar', 'baz', Foo]),
             new Foo(123, 'abc'));
     });
 });

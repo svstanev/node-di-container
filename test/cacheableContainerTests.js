@@ -1,6 +1,5 @@
 var assert = require('chai').assert;
-
-var di = require('../');
+var di = require('../src');
 
 suite('cacheableContainerTests', function(){
     test('should call factory once and cache the result', function() {

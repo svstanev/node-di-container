@@ -1,5 +1,5 @@
-var util = require('util');
-var Container = require('./container').Container;
+var Container = require('./container');
+var Optional = require('./optional');
 
 /**
  * A DI container that caches the values once resolved
@@ -9,28 +9,23 @@ var Container = require('./container').Container;
  * @param {Container} parent If present the current container will try the resolve the dependencies from there if not available on the current container.
  * @constructor
  */
-function CacheableContainer(parent) {
-    Container.call(this, parent);
+module.exports = function(parent) {
+    var cache = {};
+    var container = new Container(parent);
+    var baseResolveCore = container.resolveCore.bind(container);
 
-    this.cache = {};
-}
+    return Object.assign(container, {
+        resolveCore: function(key) {
+            if (key in cache) {
+                return Optional.of(cache[key]);
+            }
 
-util.inherits(CacheableContainer, Container);
+            var result = baseResolveCore(key);
+            if (result.hasValue()) {
+                cache[key] = result.getValue();
+            }
 
-CacheableContainer.prototype.tryResolveCore = function(key, out) {
-    if (key in this.cache) {
-        out.value = this.cache[key];
-        return true;
-    }
-
-    if (Container.prototype.tryResolveCore.call(this, key, out)) {
-        this.cache[key] = out.value;
-        return true;
-    }
-
-    return false;
+            return result;
+        }
+    });
 };
-
-
-
-module.exports.CacheableContainer = CacheableContainer;

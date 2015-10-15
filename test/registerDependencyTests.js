@@ -1,11 +1,11 @@
 var assert = require('chai').assert;
-var Container = require('../src/container').Container;
+var di = require('../src');
 
 suite('register dependency tests', function () {
     var container;
 
     setup(function () {
-        container = new Container();
+        container = di.container();
     });
 
     suite('value', function(){

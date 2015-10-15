@@ -11,7 +11,7 @@ Simple AngularJS inspired DI container for node.js
 
 To create a DI container:
 ```
-var di = require('node-di');
+var di = require('node-di-container');
 
 var container = di.container();
 ```
