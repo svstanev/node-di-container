@@ -1,7 +1,7 @@
 # node-di 
 
-[![Build Status](https://travis-ci.org/svstanev/node-di.svg?branch=master)](https://travis-ci.org/svstanev/node-di) 
-[![Coverage Status](https://coveralls.io/repos/svstanev/node-di/badge.svg?branch=master&service=github)](https://coveralls.io/github/svstanev/node-di?branch=master)
+[![Build Status](https://travis-ci.org/svstanev/node-di-container.svg?branch=master)](https://travis-ci.org/svstanev/node-di-container) 
+[![Coverage Status](https://coveralls.io/repos/svstanev/node-di-container/badge.svg?branch=master&service=github)](https://coveralls.io/github/svstanev/node-di-container?branch=master)
 
 Simple AngularJS inspired DI container for node.js
 
