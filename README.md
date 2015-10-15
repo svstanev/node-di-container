@@ -10,6 +10,7 @@ Simple AngularJS inspired DI container for node.js
 ### Creating a DI container
 
 To create a DI container:
+
 ```
 var di = require('node-di-container');
 
@@ -17,6 +18,7 @@ var container = di.container();
 ```
 
 To create a DI container that caches resolved dependencies:
+
 ```
 var container = di.cacheableContainer();
 ```
@@ -35,12 +37,13 @@ Dependencies can be defined in three ways - as values, service or factory functi
 
 #### Values
 Values can be any valid JavaScript object and are resolved to the value they are registered with:
+
 ```
 container.value('myVal', 123);
 ```
 
 #### Services
-Services a defined by a constructor function. This dependency resolves to the result of the contsructor function. The function may have dependencies that will be resolved on invocation.
+Services are defined by a constructor function. This dependency resolves to the result of the contsructor function. The function may have dependencies that will be resolved on invocation.
 ```
 container.service('myService', MyService);
 ```
@@ -63,7 +66,7 @@ container.factory(function(dep1, dep2){
 });
 ```
 
-Dependencies of the factory function may be resolved by the factory function's argument names, through the $inject annotation or when registering the factory:
+Dependencies of the factory functions may be resolved by the factory function's argument names, through the $inject annotation or when registering the factory:
 ```
 function fn(a, b, c) { ... }
 fn.$inject = ['dep1', 'dep2', 'dep3'];
@@ -74,36 +77,40 @@ container.factory(['dep1', 'dep2', 'dep3', fn]);
 ```
 
 ### Resolving dependencies
+To invoke a function or create an onject instance with dependencies use an *injector* like this:
+```
+var container = di.container()
+                    .value('x', 1)
+                    .value('y', 2);
+                     
+var injector = di.injector(container);
+```
 
 #### Invoking a function with dependencies
 Dependencies of the function may be resolved by the function's argument names, through the $inject annotation or when invoking the function:
+
 ```
-var result = di.container()
-    .value('x', 1)
-    .value('y', 2)
-    .invoke(function add(x, y) {
+var result = injector.invoke(function add(x, y) {
         return x + y;
-    })
-    ;
-        
-var result = di.container()
-    .value('x', 1)
-    .value('y', 2)
-    .invoke(['x', 'y', function(a, b) {
+    });
+
+```
+
+```
+var result = injector.invoke(['x', 'y', function(a, b) {
         return a + b;
     }])
     ;
 ```
 
 #### Invoking a constructor function with dependencies
+
 ```
-var myObject = di.container()
-    .value('x', 1)
-    .value('y', 2)
-    .createInstance(MyObject);
+var myObject = injector.createInstance(MyObject);
 ```
 
 ### Example
+
 ```
 var di = require('node-di');
 

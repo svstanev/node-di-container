@@ -6,6 +6,21 @@
   "directories": {
     "test": "test"
   },
+  "keywords": [
+    "dependency",
+    "injection",
+    "di",
+    "inversion of control",
+    "ioc"
+  ],
+  "author": {
+    "name": "svstanev",
+    "url": "https://github.com/svstanev/node-di-container"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/svstanev/node-di-container.git"
+  },
   "scripts": {
     "test": "mocha test",
     "cover": "istanbul cover _mocha"
