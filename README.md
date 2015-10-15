@@ -117,8 +117,8 @@ var injector = di.injector(container);
 Dependencies of the function may be resolved by the function's argument names:
 
 ```
-function foo(a, b) {
-    return a + b;
+function foo(x, y) {
+    return x + y;
 }
 
 var result = injector.invoke(foo);
