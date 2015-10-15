@@ -17,7 +17,7 @@ var di = require('node-di-container');
 var container = di.container();
 ```
 
-To create a DI container that caches resolved dependencies:
+To create a DI container that caches the resolved dependencies:
 
 ```
 var container = di.cacheableContainer();
@@ -30,10 +30,10 @@ var scoped = di.cacheableContainer(global);
 var local = di.cacheableContainer(scoped);
 ```
 
-Resolving dependecies always starts from the current container and moving down the chain up until it is resolved or there is no parent.
+Resolving dependecies always starts from the current container and moving up the chain of parent container up until it is resolved or there the top most container is reached.
 
 ### Registering dependencies
-Dependencies can be defined in three ways - as values, service or factory function:
+Dependencies can be registered in three ways - as values, service or factory function:
 
 #### Values
 Values can be any valid JavaScript object and are resolved to the value they are registered with:
@@ -43,17 +43,30 @@ container.value('myVal', 123);
 ```
 
 #### Services
-Services are defined by a constructor function. This dependency resolves to the result of the contsructor function. The function may have dependencies that will be resolved on invocation.
+Services are defined by a constructor function. This dependency resolves to the result of the contsructor function (usually an object instance). The constructor function may have dependencies that will be resolved on invocation.
 ```
 container.service('myService', MyService);
 ```
 
-Dependencies of the constructor function may be resolved by the constructor function's argument names, through the $inject annotation or when registering the service:
+Dependencies to be injected into the constructor function may be resolved from the constructor function's argument names:
+```
+function MyService(dep1, dep2, dep3) { ... }
+
+container.service(MyService);
+```
+
+, through the $inject annotation:
+
 ```
 function MyService(a, b, c) { ... }
 MyService.$inject = ['dep1', 'dep2', 'dep3'];
 
 container.service(MyService);
+```
+
+or when registering the service:
+```
+function MyService(a, b, c) { ... }
 
 container.service(['dep1', 'dep2', 'dep3', MyService]);
 ```
@@ -66,19 +79,33 @@ container.factory(function(dep1, dep2){
 });
 ```
 
-Dependencies of the factory functions may be resolved by the factory function's argument names, through the $inject annotation or when registering the factory:
+Dependencies of the factory functions may be resolved by the factory function's argument names:
+
+```
+function fn(dep1, dep2, dep3) { ... }
+container.factory(fn);
+```
+
+, through the $inject annotation: 
+
 ```
 function fn(a, b, c) { ... }
 fn.$inject = ['dep1', 'dep2', 'dep3'];
 
 container.factory(fn);
+```
 
+or when registering the factory:
+
+```
+function fn(a, b, c) { ... }
 container.factory(['dep1', 'dep2', 'dep3', fn]);
 ```
 
 ### Resolving dependencies
-To invoke a function or create an onject instance with dependencies use an *injector* like this:
+To invoke a function or create an onject instance with dependencies use an *injector*:
 ```
+var di = require('node-di-container');
 var container = di.container()
                     .value('x', 1)
                     .value('y', 2);
@@ -87,83 +114,60 @@ var injector = di.injector(container);
 ```
 
 #### Invoking a function with dependencies
-Dependencies of the function may be resolved by the function's argument names, through the $inject annotation or when invoking the function:
+Dependencies of the function may be resolved by the function's argument names:
 
 ```
-var result = injector.invoke(function add(x, y) {
-        return x + y;
-    });
+function foo(a, b) {
+    return a + b;
+}
+
+var result = injector.invoke(foo);
+```
+
+, through the $inject annotation:
+
+```
+function foo(a, b) {
+    return a + b;
+}
+foo.$inject = ['x', 'y'];
+
+var result = injector.invoke(foo);
 
 ```
 
+or when invoking the function:
+
 ```
-var result = injector.invoke(['x', 'y', function(a, b) {
-        return a + b;
-    }])
-    ;
+function foo(a, b) {
+    return a + b;
+}
+var result = injector.invoke(['x', 'y', foo]);
 ```
 
 #### Invoking a constructor function with dependencies
 
 ```
-var myObject = injector.createInstance(MyObject);
+function MyService(x, y) {
+    ...
+}
+
+var myService = injector.createInstance(MyService);
 ```
 
-### Example
+```
+function MyService(a, b) {
+    ...
+}
+MyService.$inject = ['x', 'y'];
+
+var myService = injector.createInstance(MyService);
+```
 
 ```
-var di = require('node-di');
-
-var global = di.cacheableContainer()
-    // registers a value
-    .value('foo', 123)
-
-    // registers a service - constructor function - with optional dependencies
-    .service('bar', Bar);
-
-// create a scoped container; dependencies are first resolved against it; if missing - try resolving from the parent container (global)
-var scoped = di.cacheableContainer(global)
-    // registers a factory function with optional dependencies
-    .factory('baz', function(foo, bar) {
-        return foo + bar.getValue();
-    });
-
-// Invoke a function with dependencies:
-// 1) dependencies can be resolved by function arguments' names; arguments' names should match dependencies
-var result = scoped.invoke(function(foo, bar, baz) {
-    return foo + bar.getValue() + baz;
-});
-
-// 2) explicitly defines dependencies with function.$inject; function arguments' names may not match dependencies
-function fn(a, b, c) {
-    return a + b.getValue() + c;
+function MyService(a, b) {
+    ...
 }
 
-fn.$inject = ['foo', 'bar', 'baz'];
-
-var result = scoped.invoke(fn);
-
-// 3) explicitly defines dependencies when invoking the function; function arguments' names may not match dependencies
-var result = scoped.invoke(['foo', 'bar', 'baz', function(a, b, c) {
-    return a + b.getValue() + c;
-}]);
-
-// Constructor functions:
-// Dependencies of the constructor function may be resolved by arguments' names, explicitly defined through the $inject annotation, or passed to the container.createInstance(array):
-function Boo(foo, bar, baz) {
-}
-
-var o = scoped.createInstance(Boo);
-
-/**
-* @param foo external dependency that will be resolved by the DI container when invoking the constructor function
-*/
-function Bar(foo) {
-    this.foo = foo;
-}
-
-Bar.prototype.getValue = function() {
-    return this.foo;
-};
-
+var myService = injector.createInstance(['x', 'y', MyService]);
 ```
