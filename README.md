@@ -210,12 +210,12 @@ Returns:
 #### di.injector(container)
 
 ##### Parameters:
-- **container**: the dependency container to resolve the dependencies from
+- **container**: the dependency [container](#container-object) to resolve the dependencies from
 
 ##### Returns:
 - [injector](#injector-object)
 
-### container <a id="container-object">#</a>
+### container <a id="container-object"></a>
 
 The object created from [di.container()]() or [di.cacheableContainer()]();
 
@@ -246,7 +246,7 @@ The object created from [di.container()]() or [di.cacheableContainer()]();
 ##### Returns
 - the container object
 
-### injector <a id="injector-object">#</a>
+### injector <a id="injector-object"></a>
 The object created from [di.injector()]().
 
 #### injector.invoke(fn)

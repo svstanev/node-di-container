@@ -2,7 +2,7 @@ var Container = require('./container');
 var CacheableContainer = require('./cacheableContainer');
 var Injector = require('./injector');
 
-module.exports = {
+var di = {
     container: function createContainer(parent) {
         return new Container(parent);
     },
@@ -15,3 +15,5 @@ module.exports = {
         return new Injector(container);
     },
 };
+
+module.exports = exports.default = di;

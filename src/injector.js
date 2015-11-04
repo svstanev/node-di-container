@@ -29,6 +29,15 @@ function Injector(container) {
         },
 
         /**
+         * Returns the resolved dependency with the given key.
+         * @param key {string} the dependency key
+         * @return {*} the resolved dependency
+         */
+        get: function(key) {
+            return container.resolve(key);
+        },
+
+        /**
          * For testing purposes only
          */
         resolveDependencies: function (fn) {
