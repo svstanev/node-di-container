@@ -183,6 +183,14 @@ function MyService(foo, bar) {
 var myService = injector.createInstance(MyService);
 ```
 
+#### Resolving dependencies by key
+
+Sometimes it is convenient to simply get any dependency like this:
+
+```
+var config = injector.get('config');
+```
+
 ## API
 
 ### di
@@ -246,6 +254,21 @@ The object created from [di.container()]() or [di.cacheableContainer()]();
 ##### Returns
 - the container object
 
+#### container.resolve(key)
+
+Returns the resolved dependency by the given key.
+
+##### Parameters
+- **key**: the key of the dependency to be resolved.
+
+##### Returns
+- the resolved dependency
+
+##### Example
+```
+var config = container.get('config');
+```
+
 ### injector <a id="injector-object"></a>
 The object created from [di.injector()]().
 
@@ -276,4 +299,22 @@ Objects are created with [Object.create()](https://developer.mozilla.org/en-US/d
 ```
 var obj = Object.create(constructor.prototype);
 constructor.apply(obj, [dependencies]);
+```
+
+#### injector.get(key)
+
+Returns the resolved dependency by the given key.
+
+##### Parameters
+- **key**: the key of the dependency to be resolved.
+
+##### Returns
+- the resolved dependency.
+
+##### Notes
+This is similar to ```container.resolve(key)```.
+
+##### Example
+```
+var config = injector.get('config');
 ```
