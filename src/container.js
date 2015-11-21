@@ -2,6 +2,10 @@ var deprecate = require('util').deprecate;
 
 var Optional = require('./optional');
 var Injector = require('./injector');
+var preconditions = require('./preconditions');
+
+var checkIsString = preconditions.checkIsString;
+var checkIsFunction = preconditions.checkIsFunction;
 
 function Container(parent) {
     var registry = {};
@@ -16,6 +20,8 @@ function Container(parent) {
          * @return {Container} the container
          */
         value: function (key, value) {
+            checkIsString(key, 'key expected to be a string');
+
             registry[key] = function () {
                 return value;
             };
@@ -30,6 +36,9 @@ function Container(parent) {
          * @return {Container} the container
          */
         service: function (key, constructor) {
+            checkIsString(key, 'key expected to be a string');
+            checkIsFunction(constructor, 'constructor expected to be a function');
+
             registry[key] = function () {
                 return injector.createInstance(constructor);
             };
@@ -44,6 +53,9 @@ function Container(parent) {
          * @return {Container} the container
          */
         factory: function (key, fn) {
+            checkIsString(key, 'key expected to be a string');
+            checkIsFunction(fn, 'fn expected to be a function');
+
             registry[key] = function () {
                 return injector.invoke(fn);
             };

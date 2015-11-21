@@ -8,11 +8,15 @@ suite('register dependency tests', function () {
         container = di.container();
     });
 
-    suite('value', function(){
+    suite('value', function() {
         test('value', function () {
             container.value('foo', 123);
 
             assert.strictEqual(container.resolve('foo'), 123);
+        });
+
+        test('it should throw error if key is not a string', function() {
+            assert.throws(function() { container.value(123, 456); }, /key expected to be a string/);
         });
     });
 
@@ -67,6 +71,13 @@ suite('register dependency tests', function () {
             assert.deepEqual(container.resolve('baz'), new FooService(123, 'abc'));
         });
 
+        test('it should throw error if key is not a string', function() {
+            assert.throws(function() { container.service(123, function() {}); }, /key expected to be a string/);
+        });
+
+        test('it should throw error if constructor is not a function', function() {
+            assert.throws(function() { container.service('foo', {}); }, /constructor expected to be a function/);
+        });
     });
 
     suite('factory', function(){
@@ -124,6 +135,14 @@ suite('register dependency tests', function () {
             container.factory('baz', baz);
 
             assert.deepEqual(container.resolve('baz'), ['abc123', '123']);
+        });
+
+        test('it should throw error if key is not a string', function() {
+            assert.throws(function() { container.factory(123, function() {}); }, /key expected to be a string/);
+        });
+
+        test('it should throw error if constructor is not a function', function() {
+            assert.throws(function() { container.factory('foo', {}); }, /fn expected to be a function/);
         });
     });
 

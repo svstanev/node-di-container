@@ -1,4 +1,8 @@
 var functionUtils = require('./functionUtils');
+var preconditions = require('./preconditions');
+
+var checkIsString = preconditions.checkIsString;
+var checkIsFunction = preconditions.checkIsFunction;
 
 function Injector(container) {
     return {
@@ -8,6 +12,8 @@ function Injector(container) {
          * @return {*} the result of the function's invokation
          */
         invoke: function(fn) {
+            checkIsFunction(fn, 'fn expected to be a function --or-- array with last item function');
+
             var func = getInjectionTarget(fn);
             var dependencies = getDependencies(fn);
 
@@ -20,6 +26,8 @@ function Injector(container) {
          * @return {*} the object created by the constructor function
          */
         createInstance: function(constructor) {
+            checkIsFunction(constructor, 'constructor expected to be a function --or-- array with last item function');
+
             var ctor = getInjectionTarget(constructor);
             var dependencies = getDependencies(constructor);
 
@@ -34,6 +42,8 @@ function Injector(container) {
          * @return {*} the resolved dependency
          */
         get: function(key) {
+            checkIsString(key, 'key expected to be string');
+
             return container.resolve(key);
         },
 
@@ -41,6 +51,8 @@ function Injector(container) {
          * For testing purposes only
          */
         resolveDependencies: function (fn) {
+            checkIsFunction(fn, 'fn expected to be a function');
+
             return container.resolveMulti(getDependencies(fn));
         },
 
@@ -48,6 +60,8 @@ function Injector(container) {
          * For testing purposes only
          */
         getDependencies: function (fn) {
+            checkIsFunction(fn, 'fn expected to be a function');
+
             return getDependencies(fn);
         },
     };

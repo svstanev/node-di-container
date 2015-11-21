@@ -52,4 +52,12 @@ suite('injector.createInstance', function () {
             injector.createInstance(['bar', 'baz', Foo]),
             new Foo(123, 'abc'));
     });
+
+    test('it should throw error if called with non-function', function() {
+        assert.throws(function() { injector.createInstance({}) }, /constructor expected to be a function --or-- array with last item function/);
+    });
+
+    test('it should throw error if called with non-function', function() {
+        assert.throws(function() { injector.createInstance(['a', 'b', {}]) }, /constructor expected to be a function --or-- array with last item function/);
+    });
 });

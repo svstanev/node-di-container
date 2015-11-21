@@ -40,4 +40,12 @@ suite('injector.invoke', function () {
 
         assert.deepEqual(injector.invoke(['bar', 'baz', foo]), [123, 'abc']);
     });
+
+    test('it should throw error if called with non-function', function() {
+        assert.throws(function() { injector.invoke({}) }, /fn expected to be a function --or-- array with last item function/);
+    });
+
+    test('it should throw error if called with non-function', function() {
+        assert.throws(function() { injector.invoke(['a', 'b', {}]) }, /fn expected to be a function --or-- array with last item function/);
+    });
 });
