@@ -1,6 +1,6 @@
 {
   "name": "node-di-container",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Simple DI container",
   "main": "./src",
   "directories": {
