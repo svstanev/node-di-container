@@ -110,7 +110,7 @@ container.factory('z', function(x, y){
 
 The function itself may have dependencies that will be resolved on invocation. For more information how the define dependencies see [Dependency annotation]().
 
-### Dependency annotation
+### Dependency annotation <a id="dependency_annotation"></a>
 
 Functions with dependencies are invoked vie the [injector](). These functions need to be annotated so that the injector knows what dependencies to inject into the function.
 
@@ -193,45 +193,53 @@ var config = injector.get('config');
 
 ## API
 
-### di
+### Top-level API
 
-#### di.container([parent])
+#### di
+
+**di** is the entry point to the *node-di-container* library:
+
+```
+var di = require('node-di-container');
+```
+
+##### di.container([parentContainer])
 
 Creates a dependency container.
 
 Parameters:
-- parent: (optional)
+- **parentContainer**: (optional)
 
 Returns:
 - [container](#container-object)
 
-#### di.cacheableContainer([parent])
+##### di.cacheableContainer([parentContainer])
 
 Creates a dependency container that cache the dependencies registered as a service or factory.
 
 Parameters:
-- **parent**: (optional)
+- **parentContainer**: (optional)
 
 Returns:
 - [container](#container-object)
 
-#### di.injector(container)
+##### di.injector(container)
 
 ##### Parameters:
-- **container**: the dependency [container](#container-object) to resolve the dependencies from
+- **container**: the dependency [container](#container-object) to resolve the dependencies from.
 
 ##### Returns:
-- [injector](#injector-object)
+- [injector](#injector-object).
 
-### container <a id="container-object"></a>
+### Container API <a id="container-object"></a>
 
 The object created from [di.container()]() or [di.cacheableContainer()]();
 
 #### container.value(key, value)
 
 ##### Parameters:
-- **key**: the key that identifies the dependency
-- **value**:
+- **key** (String): a string value that uniquely identifies the dependency in this container;
+- **value** (Any): the value this dependency is resolved to.
 
 ##### Returns
 - the container object
@@ -239,8 +247,8 @@ The object created from [di.container()]() or [di.cacheableContainer()]();
 #### container.service(key, constructor)
 
 ##### Parameters:
-- **key**: the key that identifies the dependency
-- **constuctor**: the constructor function to be invoked on resolving the dependency
+- **key** (String): a string value that uniquely identifies the dependency in this container;
+- **constuctor** (Function|Array): the constructor function to be invoked on resolving the dependency. The function can have dependencies itself that will be resolved prior to its invocation. For more information on how to annotate a function with dependencies please see [Dependency annotation](#dependency_annotation).
 
 ##### Returns
 - the container object
@@ -248,34 +256,34 @@ The object created from [di.container()]() or [di.cacheableContainer()]();
 #### container.factory(key, fn)
 
 ##### Parameters:
-- **key**: the key that identifies the dependency
-- **fn**: the function to be invoked on resolving the dependency
+- **key** (String): a string value that uniquely identifies the dependency in this container;
+- **fn** (Function|Array): the function to be invoked on resolving the dependency. The function can have dependencies itself that will be resolved prior to its invocation. For more information on how to annotate a function with dependencies please see [Dependency annotation](#dependency_annotation).
 
 ##### Returns
-- the container object
+- the container object.
 
 #### container.resolve(key)
 
 Returns the resolved dependency by the given key.
 
 ##### Parameters
-- **key**: the key of the dependency to be resolved.
+- **key** (String): the key of the dependency to be resolved.
 
 ##### Returns
-- the resolved dependency
+- the resolved dependency.
 
 ##### Example
 ```
 var config = container.get('config');
 ```
 
-### injector <a id="injector-object"></a>
+### Injector API <a id="injector-object"></a>
 The object created from [di.injector()]().
 
 #### injector.invoke(fn)
 
 ##### Parameters
-- **fn**: the function to be invoked.
+- **fn** (Function|Array): the function to be invoked. For more information on how to annotate a function with dependencies please see [Dependency annotation](#dependency_annotation).
 
 ##### Returns
 - the result of the invocation of the given function **fn**
@@ -289,10 +297,10 @@ fn.apply(null, [dependencies])
 #### injector.createInstance(constructor)
 
 ##### Parameters
-- **constructor**: the constructor function to be invoked.
+- **constructor** (Function|Array): the constructor function to be invoked. For more information on how to annotate a function with dependencies please see [Dependency annotation](#dependency_annotation).
 
 ##### Returns
-- the result of the invocation of the given constructor function **constructor**
+- the result of the invocation of the given constructor function **constructor**.
 
 ##### Notes
 Objects are created with [Object.create()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create) like this:
@@ -306,7 +314,7 @@ constructor.apply(obj, [dependencies]);
 Returns the resolved dependency by the given key.
 
 ##### Parameters
-- **key**: the key of the dependency to be resolved.
+- **key** (string): the key of the dependency to be resolved.
 
 ##### Returns
 - the resolved dependency.
